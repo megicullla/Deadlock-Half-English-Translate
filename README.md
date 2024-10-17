@@ -1,3 +1,8 @@
+
+![icon(1)(3)](https://github.com/user-attachments/assets/732225fb-46f0-42e3-833e-fc0a50cd4e45)
+
+
+
 # Deadlock-Half-English-Translate
 Переводит часть интерфеса Deadlock на английский, а именно
 
