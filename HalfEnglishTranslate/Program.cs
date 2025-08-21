@@ -1,98 +1,117 @@
-﻿string deadlockPath = @"C:\Program Files (x86)\Steam\steamapps\common\Deadlock";
+﻿using Microsoft.Win32;
+using System.Diagnostics;
+using static System.Net.Mime.MediaTypeNames;
+Console.Title = "Deadlock-HalfEnglishTranslate";
+
+StarterInfo();
+string deadlockPath = @"C:\Program Files (x86)\Steam\steamapps\common\Deadloc";
 bool deadlockExists = true;
+string[] actions = ["1", "2", "3"];
+Console.ForegroundColor = ConsoleColor.Red;
+
+string registryPath = @"Software\HalfEnglishTranslate"; // раздел в реестре
+string valueName = "DeadlockPath";           // ключ внутри раздела
+
+if (!Directory.Exists(deadlockPath))
+{
+    // Читаем данные
+    var key = Registry.CurrentUser.OpenSubKey(registryPath);
+    if (key != null)
+    {
+        deadlockPath = key.GetValue(valueName)?.ToString() ?? deadlockPath;
+        key.Close();
+    }
+}
 
 do
 {
+    Console.Clear();
+    StarterInfo();
+    Console.ForegroundColor = ConsoleColor.Red;
     if (!Directory.Exists(deadlockPath))
     {
         Console.WriteLine($"Ошибка: директория с игрой не корректна ({deadlockPath})");
         deadlockExists = false;
 
-        Console.WriteLine("Введите путь до корневой папки с игрой: \n");
-        var path = Console.ReadLine();
+        Console.WriteLine("Введите путь до корневой папки с игрой:");
+        Console.ForegroundColor = ConsoleColor.Gray;
+        string path = Console.ReadLine().ToString();
 
-        while (path == null)
+        while (string.IsNullOrEmpty(path))
         {
-            Console.WriteLine("Вы ввели пустое значение. Повторите ввод: \n");
-            path = Console.ReadLine();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Вы ввели пустое значение. Повторите ввод:");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            path = Console.ReadLine().ToString();
         }
 
         if (path != null)
         {
+            // Сохраняем данные
+            RegistryKey key = Registry.CurrentUser.CreateSubKey(registryPath);
+            key.SetValue(valueName, path);
+            key.Close();
             deadlockPath = path;
         }
     }
-
-    deadlockExists = true;
+    else
+    {
+        deadlockExists = true;
+    }
 }
 while (!deadlockExists);
 
+Console.Clear();
+StarterInfo();
+ActionChoose();
+string actionNum = Console.ReadLine().ToString();
 
-string pathRU = deadlockPath + @"\game\citadel\resource\localization\citadel_gc\citadel_gc_russian.txt";   
-string pathEN = deadlockPath + @"\game\citadel\resource\localization\citadel_gc\citadel_gc_english.txt";
-int startLineRU = 0;  // Номер строки, с которой начинаем замену в РУ файле
-int startLineEN = 0;  // Номер строки, с которой начинаем замену в АНГЛ файле
-
-try
+while (!actions.Contains(actionNum))
 {
-    // Чтение всех строк из файла АНГЛ
-    List<string> linesA = new List<string>(File.ReadAllLines(pathEN));
-
-    // Чтение всех строк из файла РУ
-    List<string> linesB = new List<string>(File.ReadAllLines(pathRU));
-
-    for (int i = 0; i < linesB.Count; i++)
-    {
-        if (linesB[i].Contains("// Hero names"))
-        {
-            startLineRU = i + 2;
-        }
-    }
-
-    for (int i = 0; i < linesA.Count; i++)
-    {
-        if (linesA[i].Contains("// Hero names"))
-        {
-            startLineEN = i + 2;
-        }
-    }
-
-    // Проверка, что файл A содержит достаточно строк
-    if (startLineEN - 1 >= linesA.Count)
-    {
-        Console.WriteLine("Файл A не содержит столько строк.");
-        return;
-    }
-
-    // Строки из файла АНГЛ, начиная с указанной строки
-    List<string> linesToCopy = linesA.GetRange(startLineEN - 1, linesA.Count - (startLineEN - 1));
-
-    // Вставка или замена строк в файле РУ
-    for (int i = 0; i < linesToCopy.Count; i++)
-    {
-        int indexB = startLineRU - 1 + i;
-        if (indexB < linesB.Count)
-        {
-            // Если строка в файле РУ существует, заменяем её
-            linesB[indexB] = linesToCopy[i];
-        }
-        else
-        {
-            // Если строка в файле РУ не существует, добавляем новую строку
-            linesB.Add(linesToCopy[i]);
-        }
-    }
-
-    linesB.RemoveAt(linesB.Count - 1);
-
-    // Запись изменений обратно в файл РУ
-    File.WriteAllLines(pathRU, linesB);
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"Произошла ошибка: {ex.Message}");
+    Console.Clear();
+    StarterInfo();
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine("Введенно неверное значение");
+    ActionChoose();
+    actionNum = Console.ReadLine().ToString();
 }
 
+if (actionNum == "1" || actionNum == "3")
+{
+    string pathHeroRU = deadlockPath + @"\game\citadel\resource\localization\citadel_gc_hero_names\citadel_gc_hero_names_russian.txt";
+    string pathHeroEN = deadlockPath + @"\game\citadel\resource\localization\citadel_gc_hero_names\citadel_gc_hero_names_english.txt";
+
+    try
+    {
+        File.Copy(pathHeroEN, pathHeroRU, true);
+        Console.Clear();
+        StarterInfo();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("Успешно");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Произошла ошибка: {ex.Message}");
+    }
+}
+if (actionNum == "2" || actionNum == "3")
+{
+    string pathModRU = deadlockPath + @"\game\citadel\resource\localization\citadel_gc_mod_names\citadel_gc_mod_names_russian.txt";
+    string pathModEN = deadlockPath + @"\game\citadel\resource\localization\citadel_gc_mod_names\citadel_gc_mod_names_english.txt";
+
+    try
+    {
+        File.Copy(pathModEN, pathModRU, true);
+        Console.Clear();
+        StarterInfo();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("Успешно");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Произошла ошибка: {ex.Message}");
+    }
+}
 
 string networthPathRU = deadlockPath + @"\game\citadel\resource\localization\citadel_main\citadel_main_russian.txt";
 
@@ -101,20 +120,67 @@ try
     // Чтение всех строк из файла с нетворсом
     List<string> lines = new List<string>(File.ReadAllLines(networthPathRU));
 
-    for (int i = 0; i < lines.Count; i++) 
+    for (int i = 0; i < lines.Count; i++)
     {
-        if (lines[i].Contains("тыс.")) 
+        if (lines[i].Contains("тыс."))
         {
             lines[i] = lines[i].Replace("тыс.", "k");
         }
     }
 
-    File.WriteAllLines(networthPathRU, lines);
+    await File.WriteAllLinesAsync(networthPathRU, lines);
 }
 catch (Exception ex)
 {
     Console.WriteLine($"Произошла ошибка: {ex.Message}");
 }
 
-Console.WriteLine("Были изменены: название героев, название предметов, буквы нетворса");
+Console.Write("Закрытие через ");
+await Task.Delay(333);
+Console.Write("3"); 
+await Task.Delay(333);
+Console.Write(".");
+await Task.Delay(333);
+Console.Write(".");
+await Task.Delay(333);
+Console.Write(".");
+await Task.Delay(333);
+Console.Write("2");
+await Task.Delay(333);
+Console.Write(".");
+await Task.Delay(333);
+Console.Write(".");
+await Task.Delay(333);
+Console.Write(".");
+await Task.Delay(333);
+Console.Write("1");
+await Task.Delay(333);
+Console.Write(".");
+await Task.Delay(333);
+Console.Write(".");
+await Task.Delay(333);
+Console.Write(".");
 
+Environment.Exit(0);
+
+static void StarterInfo()
+{
+    Console.ForegroundColor = ConsoleColor.Blue;
+    Console.WriteLine("▓█████▄ ▓█████ ▄▄▄      ▓█████▄  ██▓     ▒█████   ▄████▄   ██ ▄█▀\r\n▒██▀ ██▌▓█   ▀▒████▄    ▒██▀ ██▌▓██▒    ▒██▒  ██▒▒██▀ ▀█   ██▄█▒ \r\n░██   █▌▒███  ▒██  ▀█▄  ░██   █▌▒██░    ▒██░  ██▒▒▓█    ▄ ▓███▄░ \r\n░▓█▄   ▌▒▓█  ▄░██▄▄▄▄██ ░▓█▄   ▌▒██░    ▒██   ██░▒▓▓▄ ▄██▒▓██ █▄ \r\n░▒████▓ ░▒████▒▓█   ▓██▒░▒████▓ ░██████▒░ ████▓▒░▒ ▓███▀ ░▒██▒ █▄\r\n ▒▒▓  ▒ ░░ ▒░ ░▒▒   ▓▒█░ ▒▒▓  ▒ ░ ▒░▓  ░░ ▒░▒░▒░ ░ ░▒ ▒  ░▒ ▒▒ ▓▒\r\n ░ ▒  ▒  ░ ░  ░ ▒   ▒▒ ░ ░ ▒  ▒ ░ ░ ▒  ░  ░ ▒ ▒░   ░  ▒   ░ ░▒ ▒░\r\n ░ ░  ░    ░    ░   ▒    ░ ░  ░   ░ ░   ░ ░ ░ ▒  ░        ░ ░░ ░ \r\n   ░       ░  ░     ░  ░   ░        ░  ░    ░ ░  ░ ░      ░  ░   \r\n ░                       ░                       ░               ");
+    Console.ResetColor();
+
+    Console.ForegroundColor = ConsoleColor.Magenta;
+    Console.WriteLine("  _  _      _  __   ___           _ _    _      _____                 _      _             ___   __  \r\n | || |__ _| |/ _| | __|_ _  __ _| (_)__| |_   |_   _| _ __ _ _ _  __| |__ _| |_ ___  __ _|_  ) /  \\ \r\n | __ / _` | |  _| | _|| ' \\/ _` | | (_-< ' \\    | || '_/ _` | ' \\(_-< / _` |  _/ -_) \\ V // / | () |\r\n |_||_\\__,_|_|_|   |___|_||_\\__, |_|_/__/_||_|   |_||_| \\__,_|_||_/__/_\\__,_|\\__\\___|  \\_//___(_)__/ \r\n                            |___/                                                                    ");
+    Console.WriteLine(" twitch.tv/megicullla \n");
+    Console.ResetColor();
+}
+
+static void ActionChoose()
+{
+    Console.ForegroundColor = ConsoleColor.Magenta;
+    Console.Write("1. Перевести героев\n" +
+        "2. Перевести предметы\n" +
+        "3. Перевести все\n" +
+        "Введите число (1-3): ");
+    Console.ResetColor();
+}

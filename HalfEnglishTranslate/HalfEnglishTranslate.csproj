@@ -5,6 +5,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>377417983-00ed0ad6-0c16-426c-a689-86692de69cf3(1).ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="377417983-00ed0ad6-0c16-426c-a689-86692de69cf3(1).ico" />
+  </ItemGroup>
 
 </Project>
