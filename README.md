@@ -10,10 +10,12 @@
  - Предметы
  - Фиксит баг с отображением нетворсов
 
-# Как установить
+# Как пользоваться
 
 1. [Скачать](https://github.com/megiculaa/Deadlock-Half-English-Translate/releases/tag/release) и распокавать HalfEnglishTranslate.zip
 2. Запустить HalfEnglishTranslate.exe
+3. Выбрать нужное действие (ввести 1-3)
+<img width="921" height="393" alt="изображение" src="https://github.com/user-attachments/assets/b724c9dc-e350-4a66-9dd8-2aabce5a679b" />
 
 # Трудности
 Может возникнуть проблема нахождения папки с игрой, в таком случаее программа попросит ввести вас корректный путь до игры.
