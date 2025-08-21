@@ -20,4 +20,4 @@
 По деффолту путь выглядит так "C:\Program Files (x86)\Steam\steamapps\common\Deadlock"
 
 # Итог
-![показ](https://github.com/user-attachments/assets/91a9a91d-eec2-4b6b-b084-46dc138f30ef)
+![показ](https://github.com/user-attachments/assets/d1f0291a-6ad4-4ff4-abf1-91498cf646d6)
