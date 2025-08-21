@@ -3,7 +3,7 @@ using Spectre.Console;
 Console.Title = "Deadlock-HalfEnglishTranslate";
 
 StarterInfo();
-string deadlockPath = @"C:\Program Files (x86)\Steam\steamapps\common\Deadloc";
+string deadlockPath = @"C:\Program Files (x86)\Steam\steamapps\common\Deadlock";
 bool deadlockExists = true;
 string[] actions = ["1", "2", "3"];
 Console.ForegroundColor = ConsoleColor.Red;
