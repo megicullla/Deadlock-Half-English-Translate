@@ -1,6 +1,5 @@
 ﻿using Microsoft.Win32;
-using System.Diagnostics;
-using static System.Net.Mime.MediaTypeNames;
+using Spectre.Console;
 Console.Title = "Deadlock-HalfEnglishTranslate";
 
 StarterInfo();
@@ -76,6 +75,10 @@ while (!actions.Contains(actionNum))
     actionNum = Console.ReadLine().ToString();
 }
 
+Console.Clear();
+StarterInfo();
+await ProgressBar();
+
 if (actionNum == "1" || actionNum == "3")
 {
     string pathHeroRU = deadlockPath + @"\game\citadel\resource\localization\citadel_gc_hero_names\citadel_gc_hero_names_russian.txt";
@@ -87,7 +90,7 @@ if (actionNum == "1" || actionNum == "3")
         Console.Clear();
         StarterInfo();
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("Успешно");
+        Console.WriteLine(" Успешно");
     }
     catch (Exception ex)
     {
@@ -105,7 +108,7 @@ if (actionNum == "2" || actionNum == "3")
         Console.Clear();
         StarterInfo();
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("Успешно");
+        Console.WriteLine(" Успешно");
     }
     catch (Exception ex)
     {
@@ -135,7 +138,7 @@ catch (Exception ex)
     Console.WriteLine($"Произошла ошибка: {ex.Message}");
 }
 
-Console.Write("Закрытие через ");
+Console.Write(" Закрытие через ");
 await Task.Delay(333);
 Console.Write("3"); 
 await Task.Delay(333);
@@ -183,4 +186,20 @@ static void ActionChoose()
         "3. Перевести все\n" +
         "Введите число (1-3): ");
     Console.ResetColor();
+}
+
+static async Task ProgressBar()
+{
+    await AnsiConsole.Progress().StartAsync(async ctx =>
+    {
+
+        var gettingReadyTask = ctx.AddTask("[magenta] Перевод[/]");
+
+        while (!ctx.IsFinished)
+        {
+            await Task.Delay(300);
+            gettingReadyTask.Increment(10.5);
+
+        }
+    });
 }

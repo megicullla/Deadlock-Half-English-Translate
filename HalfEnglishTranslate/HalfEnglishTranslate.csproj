@@ -12,4 +12,8 @@
     <Content Include="377417983-00ed0ad6-0c16-426c-a689-86692de69cf3(1).ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Spectre.Console" Version="0.50.0" />
+  </ItemGroup>
+
 </Project>
