@@ -1,5 +1,5 @@
 
-![icon(1)(3)](https://github.com/user-attachments/assets/732225fb-46f0-42e3-833e-fc0a50cd4e45)
+![показ](https://github.com/user-attachments/assets/d1f0291a-6ad4-4ff4-abf1-91498cf646d6)
 
 
 
@@ -19,5 +19,4 @@
 Может возникнуть проблема нахождения папки с игрой, в таком случаее программа попросит ввести вас корректный путь до игры.
 По деффолту путь выглядит так "C:\Program Files (x86)\Steam\steamapps\common\Deadlock"
 
-# Итог
-![показ](https://github.com/user-attachments/assets/d1f0291a-6ad4-4ff4-abf1-91498cf646d6)
+![icon(1)(3)](https://github.com/user-attachments/assets/732225fb-46f0-42e3-833e-fc0a50cd4e45)
